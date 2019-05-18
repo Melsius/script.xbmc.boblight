@@ -69,6 +69,8 @@
     <setting id="other_static_red" type="slider" subsetting="true" enable="eq(-1,true)" label="32402" option="int" default="128" range="0,255" />
     <setting id="other_static_green" type="slider" subsetting="true" enable="eq(-2,true)" label="32403" option="int" default="128" range="0,255" />
     <setting id="other_static_blue" type="slider" subsetting="true" enable="eq(-3,true)" label="32404" option="int" default="128" range="0,255" />
+    <setting id="other_static_ip" type="ipaddress" subsetting="true" enable="eq(-4,true)" label="32824" default="127.0.0.1" />
+    <setting id="other_static_period" type="number" subsetting="true" enable="eq(-5,true)" label="32825" default="60" />                             
     <setting id="sep3" type="sep" />
     <setting id="other_misc_initialflash" type="bool" label="32406" default="true" />
     <setting id="other_misc_notifications" type="bool" label="32407" default="true" />

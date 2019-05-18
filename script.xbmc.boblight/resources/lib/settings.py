@@ -19,6 +19,8 @@
 
 import sys
 import xbmc, xbmcgui
+import os
+import pyping
 
 __scriptname__ = sys.modules[ "__main__" ].__scriptname__
 __addon__      = sys.modules[ "__main__" ].__addon__
@@ -81,6 +83,8 @@ class settings():
     self.other_static_blue          = int(float(__addon__.getSetting("other_static_blue")))
     self.other_misc_initialflash    = __addon__.getSetting("other_misc_initialflash") == "true"
     self.other_misc_notifications   = __addon__.getSetting("other_misc_notifications") == "true"
+    self.other_static_ip            = __addon__.getSetting("other_static_ip")
+    self.other_static_period        = int(__addon__.getSetting("other_static_period"))
     
     # Movie settings
     self.movie_saturation           = float(__addon__.getSetting("movie_saturation"))
@@ -362,6 +366,17 @@ class settings():
       bob.bob_set_priority(255)
       self.staticBobActive = False
 
+  def checkStaticBgIp(self):
+    log('settings() - checkStaticBgIp')
+    if self.category == "static":
+      response1 = pyping.ping(self.other_static_ip)
+      response2 = pyping.ping(self.other_static_ip)
+      if response1.ret_code == 0 or response2.ret_code == 0:
+        log(self.other_static_ip + ' is up!')
+        self.handleStaticBgSettings()
+      else:
+        log(self.other_static_ip + ' is down!')
+        self.bobdisable = True
   #handles the boblight configuration of all categorys
   #and applies changed settings to boblight
   #"movie","musicvideo","files","livetv","tvshows","other and "static"

@@ -20,6 +20,7 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 import os
+import time
 
 __addon__      = xbmcaddon.Addon()
 __cwd__        = __addon__.getAddonInfo('path')
@@ -44,6 +45,7 @@ capture_height = 32
 settings       = settings()
 capture        = xbmc.RenderCapture()
 useLegacyApi   = True
+lastBgCheckTime = 0
 
 class MyPlayer( xbmc.Player ):
   def __init__( self, *args, **kwargs ):
@@ -84,6 +86,7 @@ class MyMonitor( xbmc.Monitor ):
       
   def onScreensaverDeactivated( self ):
     settings.setScreensaver(False)
+    lastBgCheckTime = time.time()
       
   def onScreensaverActivated( self ):    
     settings.setScreensaver(True)
@@ -162,6 +165,7 @@ def check_state():
 
 def myPlayerChanged(state):
   log('PlayerChanged(%s)' % state)
+  lastBgCheckTime = time.time()
   xbmc.sleep(1000)
   if state == 'stop':
     ret = "static"
@@ -210,8 +214,13 @@ def run_boblight():
     if useLegacyApi:
       capture.capture(capture_width, capture_height, xbmc.CAPTURE_FLAG_CONTINUOUS)
 
+    lastBgCheckTime = time.time()
     while not xbmc.abortRequested:
       xbmc.sleep(100)
+      if (time.time() - lastBgCheckTime) >= settings.other_static_period:
+        settings.checkStaticBgIp()
+        lastBgCheckTime = time.time()
+        
       if not settings.bobdisable:
         if not bob.bob_ping() or settings.reconnect:
           if not main.connectBoblight():
