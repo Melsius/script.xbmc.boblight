@@ -286,3 +286,11 @@ msgstr ""
 msgctxt "#32823"
 msgid "Disabled"
 msgstr ""
+
+msgctxt "#32824"
+msgid "Static light on IP"
+msgstr ""
+
+msgctxt "#32825"
+msgid "Static light check period"
+msgstr ""
